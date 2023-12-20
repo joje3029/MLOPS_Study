@@ -7,6 +7,8 @@ from keras.layers import LSTM, Dropout, Dense, Activation
 import datetime
 
 def lstm(data):
+    data = pd.read_json(data, orient='records')
+
     # Compute mid price
     high_prices = data['High'].values
     low_prices = data['Low'].values
@@ -73,7 +75,7 @@ def lstm(data):
     ax.legend()
 
     # 결과를 이미지로 저장
-    fig.savefig('result_plot3.png')
+    fig.savefig('result_plot1.png')
 
     return "Prediction result saved as result_plot_result_plot3.png"  # 되었다는 알려야하니까.
 

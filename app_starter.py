@@ -18,8 +18,8 @@ if __name__ == '__main__':
     api = Api(app, version='1.0', title='API 문서', description='Swagger 문서', doc="/api-docs")
                                 # title : Swagger UI에서 표시되는 API 문서의 제목
     test_api = api.namespace('test', description='조회 API') # api에 이름을 붙임. api 구분하려고
-    data = api.namespace('Deveelope', description='데이터 get API')
-
+    #api 즉 야후파이낸스에 직접 접근.
+    data = api.namespace('Develop', description='데이터 get API')
     #Db 전용
     data_from_db = api.namespace('datafromdb', description='Getting data from DB')
 
@@ -36,21 +36,23 @@ if __name__ == '__main__':
     parser.add_argument('end', type=str, help='End date for data retrieval')
         
     # 데이터 get API의 경로 ->데이터를 가져옴. 
-    @data.route('/')
+    @data.route('/') #기존대로 / 로 하면 getData부분과 아래의 GetFromDB 부분의 엔드포인트가 충돌해서 
     class GetData(Resource):
         def get(self):
+            print("여기 오니?")
             #얘는 json으로 주니까.
-            result = data_from(self) #data_from_yf에서 return한 json값을 lstm.py에게 리턴
+            args = parser.parse_args() # 들어온걸 파싱해서
+            result = data_from(args) #data_from에 넘김 그 결과를 result로 받고 
+            return lstm(result) #result를 인자로 lstm.py에 줌. 그리고 lstm.py가 일한걸 넘김.
 
-            return lstm(result)
 
-    @data.route('/')
-    class GetFromDB:
-        def get(self):
-            s = requests.args.get('s',1,str)
-            e = requests.args.get('e',1,str)
-            print(s,e,type(s))
-            return maria_test.get_from_db(s,e)
+    # @data.route('/get-from-db')
+    # class GetFromDB:
+    #     def get(self):
+    #         s = requests.args.get('s',1,str)
+    #         e = requests.args.get('e',1,str)
+    #         print(s,e,type(s))
+    #         return maria_test.get_from_db(s,e)
             
   
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 9999)), debug=True)
