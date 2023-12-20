@@ -11,6 +11,7 @@ import requests
 
 from data_from_yf import data_from
 from lstm import lstm
+from maria_test import get_from_db
 
 if __name__ == '__main__':
     app = Flask(__name__)
@@ -36,23 +37,23 @@ if __name__ == '__main__':
     parser.add_argument('end', type=str, help='End date for data retrieval')
         
     # 데이터 get API의 경로 ->데이터를 가져옴. 
-    @data.route('/') #기존대로 / 로 하면 getData부분과 아래의 GetFromDB 부분의 엔드포인트가 충돌해서 
+    @data.route('/get-data/') #기존대로 / 로 하면 getData부분과 아래의 GetFromDB 부분의 엔드포인트가 충돌해서 
     class GetData(Resource):
         def get(self):
-            print("여기 오니?")
             #얘는 json으로 주니까.
             args = parser.parse_args() # 들어온걸 파싱해서
             result = data_from(args) #data_from에 넘김 그 결과를 result로 받고 
             return lstm(result) #result를 인자로 lstm.py에 줌. 그리고 lstm.py가 일한걸 넘김.
 
 
-    # @data.route('/get-from-db')
-    # class GetFromDB:
-    #     def get(self):
-    #         s = requests.args.get('s',1,str)
-    #         e = requests.args.get('e',1,str)
-    #         print(s,e,type(s))
-    #         return maria_test.get_from_db(s,e)
+    @data.route('/get-from-db')
+    class GetFromDB(Resource):
+        def get(self):
+            print("여기 지나가니?")
+            s = requests.args.get('s',1,str)
+            e = requests.args.get('e',1,str)
+            print(s,e,type(s))
+            return maria_test.get_from_db(s,e)
             
   
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 9999)), debug=True)
