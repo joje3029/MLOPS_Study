@@ -25,7 +25,7 @@ def get_from_db(s,e): #s : 인자로 들어올 start 날짜, e : 인자로 들�
 
     json_data = df.to_json()
 
-    with open('output.json', 'w') as json_file:
+    with open('output.json2', 'w') as json_file:
         json_file.write(json_data)
 
     return json_data

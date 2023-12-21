@@ -58,7 +58,8 @@ if __name__ == '__main__':
             # e = requests.args.get('e',1,str)
             print(s,e,type(s))
             
-            return get_from_db(s,e)
+            result = get_from_db(s,e)
             
+            return lstm(result)
   
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 9999)), debug=True)
