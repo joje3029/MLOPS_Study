@@ -75,7 +75,7 @@ def lstm(data):
     ax.legend()
 
     # 결과를 이미지로 저장
-    fig.savefig('result_plot4.png')
+    fig.savefig('result_plot5.png')
 
-    return "Prediction result saved as result_plot_result_plot3.png"  # 되었다는 알려야하니까.
+    return "Prediction result saved as result_plot_result_plot5.png"  # 되었다는 알려야하니까.
 

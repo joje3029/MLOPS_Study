@@ -12,6 +12,9 @@ import requests
 from data_from_yf import data_from
 from lstm import lstm
 from test.maria_test import get_from_db
+from data_from_yf_api import data_from_yf_api
+import insert_result
+import select_result
 
 if __name__ == '__main__':
     app = Flask(__name__)
@@ -53,13 +56,50 @@ if __name__ == '__main__':
             s = datetime.strptime(args['start'], '%Y-%m-%d')
             e = datetime.strptime(args['end'], '%Y-%m-%d')
 
-
-            # s = requests.args.get('s',1,str)
-            # e = requests.args.get('e',1,str)
             print(s,e,type(s))
             
             result = get_from_db(s,e)
             
             return lstm(result)
+        
+    @data.route('/get-data-todb/')
+    class GetDataToDB(Resource):
+        def get(self):
+            print(1)
+            args = parser.parse_args()
+            # 야후파이낸스에 가서 주식 결과 가져옴. 
+            print(2)
+
+            result = data_from_yf_api()
+
+            print(3)
+            # 근데 학습 시키기 전에 db에 오늘꺼를 db에 insert 시킴.
+            insert_result(result) #이건 insert만 하면 끝나.
+
+            print(4)
+            #이걸또 다 가꼬와서 학습
+            query_result= select_result() # 판다스 형태로 가져옴
+
+            print(5)
+            return lstm(query_result)
+
+
+
+
+            print(result)
+
+            #그리고 lstm 학습은 insert시킨꺼 까지 해서 db에서가져와서 학습
+
+            print(result) 
+            # 문제는 오늘꺼 뿐만 아니라 다 가져온다가 인데. 아! watchdog를 이용하면 매일 데꼬 올꺼니까 상관 없을라나. 
+            # -> 그럼 data_from_yf는 그대로 두고 저거를 변형시킨 모듈을 만들어야겠네.
+
+
+
+            # # 야후파이낸스에서 가져온 주식결과로 lstm을 학습시킴
+            # lstmResult = lstm(result)
+
+            return 
   
+
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 9999)), debug=True)
