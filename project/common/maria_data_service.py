@@ -18,7 +18,7 @@ class MariaDataService(SingletonInstance):
                                 echo=None                                )
         '''
         # 운영
-        self.engine = create_engine('mysql://root:1436@localhost:3306/samsung',
+        self.engine = create_engine('mysql://root:@localhost:3306/samsung',
                                     pool_recycle=100,
                                     pool_size=500,
                                     max_overflow=100,

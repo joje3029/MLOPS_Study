@@ -11,7 +11,7 @@ import requests
 
 from data_from_yf import data_from
 from lstm import lstm
-from maria_test import get_from_db
+from test.maria_test import get_from_db
 
 if __name__ == '__main__':
     app = Flask(__name__)
@@ -46,14 +46,19 @@ if __name__ == '__main__':
             return lstm(result) #result를 인자로 lstm.py에 줌. 그리고 lstm.py가 일한걸 넘김.
 
 
-    @data.route('/get-from-db')
+    @data.route('/get-from-db/')
     class GetFromDB(Resource):
         def get(self):
-            print("여기 지나가니?")
-            s = requests.args.get('s',1,str)
-            e = requests.args.get('e',1,str)
+            args = parser.parse_args()
+            s = datetime.strptime(args['start'], '%Y-%m-%d')
+            e = datetime.strptime(args['end'], '%Y-%m-%d')
+
+
+            # s = requests.args.get('s',1,str)
+            # e = requests.args.get('e',1,str)
             print(s,e,type(s))
-            return maria_test.get_from_db(s,e)
+            
+            return get_from_db(s,e)
             
   
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 9999)), debug=True)
