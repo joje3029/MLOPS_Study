@@ -28,5 +28,5 @@ def get_from_db(s,e): #s : 인자로 들어올 start 날짜, e : 인자로 들�
     with open('output.json2', 'w') as json_file:
         json_file.write(json_data)
 
-    return json_data
+    return json_data # 여기서도 json으로 데이터프레임을 바꿔서 함.
     # return test #가져온 테이블을 retrun
